@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tareas :: Picklist</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    
+
+    <link rel="stylesheet" type="text/css" media="screen" href="css/jexcel.css" />
+    <script src="js/jquery.js"></script>
+    <script src="js/jexcel.js"></script>
+    <script src="js/calendar.js"></script>
+    <link rel="stylesheet" href="css/calendar.css" type="text/css" />
+<script>
+    
+</script>
+<style>
+    body {
+  background-color: #FFFFFF;
+}
+@media (min-width: 991.98px) {
+  main {
+    padding-left: 240px;
+  }
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  padding: 58px 0 0; /* Height of navbar */
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
+  width: 240px;
+  z-index: 600;
+}
+
+@media (max-width: 991.98px) {
+  .sidebar {
+    width: 100%;
+  }
+}
+.sidebar .active {
+  border-radius: 5px;
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+}
+
+.sidebar-sticky {
+  position: relative;
+  top: 0;
+  height: calc(100vh - 48px);
+  padding-top: 0.5rem;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+</style>
+</head>
+<body>
+<nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-dark">
+    <div class="position-sticky">
+      <div class="list-group list-group-flush mx-3 mt-4">
+        <h2 class="text-white">Tarea</h2>
+        <a
+          href="index.html"
+          class="list-group-item list-group-item-action py-2 ripple active text-white mb-1"
+          aria-current="true"
+        >
+          <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>PS CustomFields</span>
+        </a>
+        <a href="clases.html" class="list-group-item list-group-item-action py-2 ripple active text-white mb-1" >
+          <i class="fas fa-chart-area fa-fw me-3"></i><span>PS Clases</span>
+        </a>
+        <a href="rt.html" class="list-group-item list-group-item-action py-2 ripple active text-white mb-1" >
+          <i class="fas fa-chart-area fa-fw me-3"></i><span>PS RecordTypes</span>
+        </a>
+        <a href="mergePackage.html" class="list-group-item list-group-item-action py-2 ripple active  bg-warning text-white mb-1" >
+          <i class="fas fa-chart-area fa-fw me-3"></i><span>Mergear Packages</span>
+        </a>
+        <a href="picklist.html" class="list-group-item list-group-item-action py-2 ripple active  bg-warning text-white mb-1" >
+          <i class="fas fa-chart-area fa-fw me-3"></i><span>Genera Picklist Dependiente</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+  <!-- Sidebar -->
+
+<main>
+    <div class="container-fluid mt-2" >
+      <div class="row mt-3"><h1>Genera seccion Picklist dependiente</h1></div>
+        <div class="row mt-3">
+            <div class="col d-flex flex-column justify-content-center">
+                <div><button class="btn btn-block btn-success mt-2 mb-2" onclick="cargar_diezmos()">Generar XML</button></div>
+                
+                <div id="my" style="width:80vw "></div>
+                <div><button class="btn btn-block btn-success mt-2 mb-2" onclick="cargar_diezmos()">Generar XML</button></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <pre><code id="res"></code></pre>
+      </div>
+    </div>
+    <div class="modal fade" id="ModalCargando" tabindex="-1" >
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                
+                <div class="modal-body">
+                    <h3>Se están cargando los campos.</h3>
+                   
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script>
+        var campos=[];
+        var myModal = new bootstrap.Modal(document.getElementById('ModalCargando'), {
+            })
+
+        $(".loader").fadeOut();
+        function cargada(){
+            $(".loader").fadeOut();
+        }
+        data = [
+            ['']
+        ];
+
+        $('#my').jexcel({ 
+            data:data, 
+            colWidths: [ 200,500,500] ,
+            colHeaders:  [ 'fullname','label','padre'],
+            allowInsertColumn:false,
+            columns: [
+                { type: 'text' },
+                { type: 'text' },
+                { type: 'text'}
+                    
+            ]
+
+        });
+        var i=0;
+        var l=0;
+        function activar(){
+            $(".loader").fadeIn();
+            console.log("espero 1 segundos");
+            setTimeout('recorrer()',1000);
+        
+        }
+
+
+        function recorrer(){
+
+        var a= $('#my').jexcel('getData',false);
+        var l=a.length;
+        var i=0;
+        var xml= ` &lt;valueSetDefinition&gt
+        &lt;sorted&gt;false&lt;/sorted&gt;`;
+        let vs =[];
+        a.forEach( r =>{
+            console.log(r);
+            if(vs.length==0){
+              vs.push({name:r[2],lista:[r[0]]})
+            }else{
+              let vv =vs.find(v=>v.name==r[2]);
+              if(!vv){
+                vs.push({name:r[2],lista:[r[0]]});
+              }else{
+                vv.lista.push(r[0])
+              }
+              
+            }
+            xml+=`
+          &lt;value&gt;
+            &lt;fullName&gt;${r[0]}&lt;/fullName&gt;
+            &lt;default&gt;false&lt;/default&gt;
+            &lt;label&gt;${r[1].trim()}&lt;/label&gt;
+          &lt;/value&gt;`;
+            //capos.push(r[0]);
+            //console.log(r[3]);
+            
+        });
+        xml+=`&lt;/valueSetDefinition&gt`;
+
+        vs.forEach(v=>{
+          v.lista.forEach(e=>{
+            let nombre= v.name.replace('&','&amp;')
+            xml+=`
+            &lt;valueSettings&gt;
+              &lt;controllingFieldValue&gt;${nombre.trim()}&lt;/controllingFieldValue&gt;
+              &lt;valueName&gt;${e}&lt;/valueName&gt;
+            &lt;/valueSettings&gt;`;
+          })
+          
+        })
+        document.getElementById('res').innerHTML=xml;
+        //window.location.href = "ver_temporal.php";
+        //document.getElementById('f').submit();  
+        
+        myModal.toggle()
+        }
+
+        
+
+        function cargar_diezmos(){
+           
+            myModal.toggle()
+            console.log(myModal)
+           // myModalEl.show()
+            setTimeout('recorrer()',1000);
+        }
+    </script>
+    
+</body>
+
+</html>
