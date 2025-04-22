@@ -33,10 +33,10 @@ Genera código para tu picklist dependiente de manera fácil y dinamica
 ```bash
 git clone https://github.com/tuusuario/salesforce-dev-toolbox.git
 
-2. Abrí index.html directamente en tu navegador.
+2. Abre index.html directamente en tu navegador.
 No se necesitan servidores ni dependencias externas.
 ```
-Otra opción es ingresar directamente en [SFUtils](https://wachuleru.github.io/SFutils)
+*Otra opción es ingresar directamente en [SFUtils](https://wachuleru.github.io/SFutils)
 
 🧑‍💻 Autor
 Desarrollado por Emilio Sepúlveda (wachuleru) – Salesforce Developer y entusiasta de la automatización.
