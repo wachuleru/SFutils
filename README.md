@@ -39,7 +39,7 @@ No se necesitan servidores ni dependencias externas.
 *Otra opción es ingresar directamente en [SFUtils](https://wachuleru.github.io/SFutils)
 
 🧑‍💻 Autor
-Desarrollado por Emilio Sepúlveda (wachuleru) – Salesforce Developer y entusiasta de la automatización.
+Desarrollado por Emilio Sepúlveda (wachuleru) – Developer.
 
 📄 Licencia
 MIT License. Libre para usar, modificar y compartir.
