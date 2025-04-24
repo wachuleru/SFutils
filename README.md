@@ -12,7 +12,7 @@ Sube múltiples archivos `package.xml` y la herramienta:
 - Permite descargar el resultado como un nuevo `package.xml`.
 
 ### 🧩 Generador de código para `PermissionSet`
-Agrega a tu `PermissionSet` secciones para ApexClass, CustomField y RecordTypes de manera masiva
+Agrega a tu `PermissionSet` secciones para ApexClass, Object, CustomField y RecordTypes de manera masiva
 
 ### 🔄 Asistente para Picklist Dependientes
 Genera código para tu picklist dependiente de manera fácil y dinamica
