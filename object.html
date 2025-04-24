@@ -176,7 +176,7 @@
         a.sort((a,b)=>a<b?-1:1);
         a.forEach( r =>{
             console.log(r);
-            xml=xml.length?`
+            xml=xml.length?xml+`
             `:``;
             xml+=`&lt;objectPermissions&gt;
   &lt;allowCreate&gt;false&lt;/allowCreate&gt;
