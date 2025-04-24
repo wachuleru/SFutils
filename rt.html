@@ -96,10 +96,10 @@
       <div class="row mt-3"><h1>Genera seccion RecordTypes para Permission Set</h1></div>
       <div class="row mt-3">
           <div class="col d-flex flex-column justify-content-center">
-              <div><button class="btn btn-block btn-success mt-2 mb-2" onclick="cargar_diezmos()">Generar XML</button></div>
+              <div><button class="btn btn-block btn-success mt-2 mb-2" onclick="cargarData()">Generar XML</button></div>
               
               <div id="my" style="width:80vw "></div>
-              <div><button class="btn btn-block btn-success mt-2 mb-2" onclick="cargar_diezmos()">Generar XML</button></div>
+              <div><button class="btn btn-block btn-success mt-2 mb-2" onclick="cargarData()">Generar XML</button></div>
           </div>
       </div>
       <div class="row">
@@ -170,6 +170,7 @@
         var l=a.length;
         var i=0;
         var xml= ``;
+        a.sort((a,b)=>a<b?-1:1);
         a.forEach( r =>{
             console.log(r);
             xml+=`  &lt;recordTypeVisibilities&gt;
@@ -190,7 +191,7 @@
 
         
 
-        function cargar_diezmos(){
+        function cargarData(){
            
             myModal.toggle()
             console.log(myModal)
