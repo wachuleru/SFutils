@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ordenador de XML PermissionSet</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    textarea {
+      font-family: monospace;
+      height: 300px;
+    }
+  </style>
+</head>
+<body class="bg-light p-4">
+  <div class="container">
+    <h1 class="mb-4">Ordenar XML de PermissionSet</h1>
+
+    <div class="mb-3">
+      <label for="fileInput" class="form-label">O subir archivo XML:</label>
+      <input type="file" id="fileInput" class="form-control" accept=".xml">
+    </div>
+
+    <div class="mb-3">
+      <label for="xmlInput" class="form-label">O pegar contenido XML:</label>
+      <textarea id="xmlInput" class="form-control" placeholder="Pega aquí el XML..."></textarea>
+    </div>
+
+    <button id="sortBtn" class="btn btn-primary mb-3">Ordenar XML</button>
+    <button id="downloadBtn" class="btn btn-success mb-3 ms-2" disabled>Descargar XML ordenado</button>
+
+    <div class="mb-3">
+      <label for="xmlOutput" class="form-label">Resultado ordenado:</label>
+      <textarea id="xmlOutput" class="form-control" readonly></textarea>
+    </div>
+  </div>
+
+  <script>
+    const SORT_KEYS = {
+      'applicationVisibilities': 'application',
+      'classAccesses': 'apexClass',
+      'customPermissions': 'name',
+      'customSettingAccesses': 'name',
+      'fieldPermissions': 'field',
+      'objectPermissions': 'object',
+      'pageAccesses': 'apexPage',
+      'recordTypeVisibilities': 'recordType',
+      'tabSettings': 'tab'
+    };
+
+    function sortPermissionSetXml(xmlString) {
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(xmlString, 'text/xml');
+        const root = xml.documentElement;
+      
+        // Obtener todos los hijos directos del root (PermissionSet)
+        const children = Array.from(root.childNodes).filter(node => node.nodeType === 1);
+      
+        // Agrupar por nombre de etiqueta
+        const grouped = {};
+        children.forEach(child => {
+          const tag = child.tagName;
+          if (!grouped[tag]) grouped[tag] = [];
+          grouped[tag].push(child);
+        });
+      
+        // Ordenar nodos dentro de cada grupo (si aplica)
+        for (const tag in grouped) {
+          const nodes = grouped[tag];
+          const key = SORT_KEYS[tag];
+          if (nodes.length > 1 && key) {
+            grouped[tag] = nodes.sort((a, b) => {
+              const aKey = a.getElementsByTagName(key)[0]?.textContent || '';
+              const bKey = b.getElementsByTagName(key)[0]?.textContent || '';
+              return aKey.localeCompare(bKey);
+            });
+          }
+        }
+      
+        // Eliminar todos los hijos existentes
+        children.forEach(child => root.removeChild(child));
+      
+        // Obtener nombres de etiquetas ordenados alfabéticamente
+        const orderedTags = Object.keys(grouped).sort();
+      
+        // Volver a insertar los nodos ordenados por nombre y clave
+        orderedTags.forEach(tag => {
+          grouped[tag].forEach(node => root.appendChild(node));
+        });
+      
+        const serializer = new XMLSerializer();
+        return serializer.serializeToString(xml);
+    }
+
+    function download(content, filename, contentType) {
+      const a = document.createElement("a");
+      const file = new Blob([content], { type: contentType });
+      a.href = URL.createObjectURL(file);
+      a.download = filename;
+      a.click();
+    }
+
+    document.getElementById('fileInput').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (file && file.type === 'text/xml') {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById('xmlInput').value = e.target.result;
+        };
+        reader.readAsText(file);
+      } else {
+        alert("Por favor selecciona un archivo .xml válido.");
+      }
+    });
+
+    document.getElementById('sortBtn').addEventListener('click', () => {
+      const inputXml = document.getElementById('xmlInput').value.trim();
+      if (!inputXml) return alert("Por favor ingresa o sube un XML válido.");
+      try {
+        const sortedXml = sortPermissionSetXml(inputXml);
+        document.getElementById('xmlOutput').value = vkbeautify.xml(sortedXml);
+        document.getElementById('downloadBtn').disabled = false;
+      } catch (err) {
+        alert("Error al procesar el XML.");
+        console.error(err);
+      }
+    });
+
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      const content = document.getElementById('xmlOutput').value;
+      download(content, 'PermissionSet_Ordenado.xml', 'text/xml');
+    });
+
+    // Incluye vkbeautify para indentado del XML
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/gh/vkiryukhin/vkBeautify/vkbeautify.js';
+    document.head.appendChild(script);
+  </script>
+</body>
+</html>
